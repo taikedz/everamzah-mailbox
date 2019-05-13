@@ -10,6 +10,18 @@ local S, NS = dofile(MP.."/intllib.lua")
 
 screwdriver = screwdriver or {}
 
+function mailbox.allow_take(pos, listname, index, stack, player)
+	local meta = minetest.get_meta(pos)
+
+	if player:get_player_name() ~= meta:get_string("owner") then
+		return 0
+	end
+	return stack:get_count()
+end
+
+function mailbox.allow_move(pos)
+	return 0
+end
 
 function mailbox.get_formspec(pos, owner, fs_type)
 	local selected = "false"
@@ -138,6 +150,8 @@ minetest.register_node("mailbox:mailbox", {
 	can_dig = mailbox.can_dig,
 	on_metadata_inventory_put = mailbox.on_metadata_inventory_put,
 	allow_metadata_inventory_put = mailbox.allow_metadata_inventory_put,
+	allow_metadata_inventory_take = mailbox.allow_take,
+	allow_metadata_inventory_move = mailbox.allow_move,
 })
 
 minetest.register_node("mailbox:letterbox", {
@@ -157,6 +171,8 @@ minetest.register_node("mailbox:letterbox", {
 	can_dig = mailbox.can_dig,
 	on_metadata_inventory_put = mailbox.on_metadata_inventory_put,
 	allow_metadata_inventory_put = mailbox.allow_metadata_inventory_put,
+	allow_metadata_inventory_take = mailbox.allow_take,
+	allow_metadata_inventory_move = mailbox.allow_move,
 })
 
 minetest.register_craft({
